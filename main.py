@@ -118,7 +118,7 @@ def main():
         #np.set_printoptions(precision=decimals, suppress=True)
 
         if np.any(b < 0):
-            log('The method is not applicable!', LOG)
+            raise ValueError("Right-hand side values of the inequality constraints must be non-negative")
         else:
             maximize(a, b, c, ACCURACY)
 
