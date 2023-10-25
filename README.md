@@ -40,6 +40,10 @@ the input.txt file should look like this:
     #Vector b:
     16 9
 
+Running the code:
+
+    python main.py -p max -i input.txt
+
 Output format:
 * A vector of decision variables - x
 * Maximum (minimum) value of the objective function.
@@ -49,3 +53,13 @@ Example output:
     Final X is:  [5.99360088e+00 1.00274248e+00 1.82831024e-03 1.82832957e-03]
     Final value is:  6.996343360206015
 
+## Options
+
+-h, --help            show this help message and exit\
+-i INPUT, --input INPUT\
+                    Set input file path. Default: input.txt\
+-l, --log             Set logging. Default: False\
+-p PROBLEM, --problem PROBLEM\
+                    Set problem type. Possible values: min, max. Default: max\
+-a ACCURACY, --accuracy ACCURACY\
+                    Set approximation accuracy. Default: 0.001
