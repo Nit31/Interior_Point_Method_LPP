@@ -28,14 +28,9 @@ def output(tableau: np.ndarray):
     print("A vector of decision variables:", x)
     print("Optimal value:", np.array([tableau[0][tableau.shape[1] - 1]]))
 
-def initial_X(A: np.ndarray, b: np.ndarray):
-    #TODO: write initialization of X
-    ...
-
 # Implementation of interior point method
-def maximize(A: np.ndarray, b: np.ndarray, c: np.ndarray, accuracy):
+def maximize(A: np.ndarray, b: np.ndarray, c: np.ndarray, x: np.ndarray, accuracy):
     # TODO: x = initial_X(A, b)
-    x = np.array([1 / 2, 7 / 2, 1, 2], float)
     n = np.size(A, 1)
     alpha = 0.5
 
@@ -55,7 +50,7 @@ def maximize(A: np.ndarray, b: np.ndarray, c: np.ndarray, accuracy):
         y = np.add(np.ones(n, float), (alpha / nu) * cp)
         x = np.dot(D, y)
 
-        if LOG == True:
+        if LOG:
             print("In iteration  ", i, " we have x = ", x, "\n")
             i = i + 1
 
@@ -106,10 +101,24 @@ def main():
     # Read input file
     with open(input_file) as file:
         elements = file.read().replace("\n", ' ').split("#")[1:]
-        c, a, b = [np.asarray(i.split(":")[1].strip().split(" ")) for i in elements]
+        c, a, b, init_x = [np.asarray(i.split(":")[1].strip().split(" ")) for i in elements]
+
+        # Save signs of inequalities in the list
+        signs = []
+        i = 0
+        while i < len(a):
+            if a[i] == "<" or a[i] == ">":
+                signs.append(a[i])
+                # remove element from a
+                a = np.delete(a, i)
+                i-=1
+            i+=1
+
+        # Convert to normal representation
         c = np.array(c, dtype=float)
         b = np.array(b, dtype=float)
         a = np.reshape(np.array(a, dtype=float), (-1, c.size))
+        init_x = np.array(init_x, dtype=float)
 
         # Change minimize problem to maximize
         # TODO: fix the problem with minimize
@@ -117,10 +126,25 @@ def main():
 
         #np.set_printoptions(precision=decimals, suppress=True)
 
+        # Add slacks to the matrix
+        a_shape_slacks = (a.shape[0], a.shape[1] + a.shape[0])
+        zeros = np.zeros(a_shape_slacks)
+        zeros[:a.shape[0], :a.shape[1]] = a
+        a = zeros
+        for i in range(a.shape[0]):
+            if signs[i] == "<":
+                a[i][a.shape[1] - a.shape[0] + i] = 1
+            elif signs[i] == ">":
+                a[i][a.shape[1] - a.shape[0] + i] = -1
+
+        # Add slacks to the objective function
+        zeros = np.zeros(c.shape[0] + a.shape[0])
+        zeros[:c.shape[0]] = c
+        c = zeros
         if np.any(b < 0):
             raise ValueError("Right-hand side values of the inequality constraints must be non-negative")
         else:
-            maximize(a, b, c, ACCURACY)
+            maximize(a, b, c, init_x, ACCURACY)
 
 
 if __name__ == '__main__':

@@ -21,9 +21,10 @@ In terminal run the following:
 ## Usage
 Input format:
 The input contains:
-* A vector of coefficients of objective function (including slacks and surpluses) - C.
-* A matrix of coefficients of constraint function after adding slack and surplus variables - A.
+* A vector of coefficients of objective function - C.
+* A matrix of coefficients of constraint function with the signs of equations - A.
 * A vector of right-hand side numbers - b.
+* A vector of the initial point lay in the feasible region - x0.
 
 Input Example:
 For the problem\
@@ -33,12 +34,14 @@ x1 + 3x2 > 9\
 the input.txt file should look like this:
 
     #Objective function:
-    1 1 0 0
+    1 1
     #Matrix:
-    2 4 1 0
-    1 3 0 -1
+    2 4 <
+    1 3 >
     #Vector b:
     16 9
+    #Initial x:
+    0.5 3.5 1 2
 
 Running the code:
 
