@@ -29,7 +29,7 @@ def output(tableau: np.ndarray):
     print("Optimal value:", np.array([tableau[0][tableau.shape[1] - 1]]))
 
 # Implementation of interior point method
-def maximize(A: np.ndarray, b: np.ndarray, c: np.ndarray, x: np.ndarray, accuracy):
+def maximize(A: np.ndarray, b: np.ndarray, c: np.ndarray, x: np.ndarray, task_type, accuracy):
     # TODO: x = initial_X(A, b)
     n = np.size(A, 1)
     alpha = 0.5
@@ -57,6 +57,8 @@ def maximize(A: np.ndarray, b: np.ndarray, c: np.ndarray, x: np.ndarray, accurac
         if norm(np.subtract(x, v), ord=2) < 0.01:
             break
 
+    if task_type == "Minimize":
+        c = -c
     print("Final X is: ", x)
     print("Final value is: ", np.dot(c, x))
 
@@ -121,7 +123,6 @@ def main():
         init_x = np.array(init_x, dtype=float)
 
         # Change minimize problem to maximize
-        # TODO: fix the problem with minimize
         c = -c if task_type == "Minimize" else c
 
         #np.set_printoptions(precision=decimals, suppress=True)
@@ -141,10 +142,12 @@ def main():
         zeros = np.zeros(c.shape[0] + a.shape[0])
         zeros[:c.shape[0]] = c
         c = zeros
+
+        # Run the interior point method
         if np.any(b < 0):
             raise ValueError("Right-hand side values of the inequality constraints must be non-negative")
         else:
-            maximize(a, b, c, init_x, ACCURACY)
+            maximize(a, b, c, init_x, task_type, ACCURACY)
 
 
 if __name__ == '__main__':
