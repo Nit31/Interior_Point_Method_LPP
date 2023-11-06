@@ -30,7 +30,6 @@ def output(tableau: np.ndarray):
 
 # Implementation of interior point method
 def maximize(A: np.ndarray, b: np.ndarray, c: np.ndarray, x: np.ndarray, task_type, accuracy):
-    # TODO: x = initial_X(A, b)
     n = np.size(A, 1)
     alpha = 0.5
 
