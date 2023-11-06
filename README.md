@@ -28,9 +28,9 @@ The input contains:
 
 Input Example:
 For the problem\
-z = x1 + x2\
-2x1 + 4x2 < 16\
-x1 + 3x2 > 9\
+$z = x_1 + x_2$\
+$2x_1 + 4x_2 < 16$\
+$x_1 + 3x_2 > 9$\
 the input.txt file should look like this:
 
     #Objective function:
